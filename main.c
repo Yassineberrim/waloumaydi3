@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 19:24:41 by slazar            #+#    #+#             */
-/*   Updated: 2023/10/09 19:16:34 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/10 00:05:03 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,9 +410,9 @@ int	main(int __unused ac, char __unused **av, char **envirement)
 					continue ;
 				}
 				cmd->env = env;
-				char **l9awi = lincke_list_toaraay(env);
-				execution_proto(cmd, l9awi);
-				free_double(l9awi);
+				char **str = lincke_list_toaraay(env);
+				execution_proto(cmd, str);
+				free_double(str);
 				destroy_cmd(cmd);
 			}
 		}
