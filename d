@@ -1,0 +1,14 @@
+Makefile
+d
+env.c
+env.o
+execution
+lexer.c
+lexer.o
+main.c
+main.o
+minishell
+minishell.h
+my_libft
+utils.c
+utils.o

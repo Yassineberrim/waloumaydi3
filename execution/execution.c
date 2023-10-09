@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 17:43:17 by yberrim           #+#    #+#             */
-/*   Updated: 2023/10/09 20:44:53 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/09 20:59:42 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,16 @@ int	execution_proto(t_cmd *cmd, char **env)
 	if (!cmd->next)
 	{
 		if (is_buildin(cmd))
+		{
+			int backup_output = dup(1);
+			int backup_input = dup(0);
+			check_redirections(cmd);
 			built_in(cmd);
+			if(cmd->fd_out != 1)
+				dup2(backup_output, 1);
+			if(cmd->fd_in != 0)
+				dup2(backup_input, 0);
+		}
 		else
 		{
 			if ((cmd->child_pid = fork()) == 0)
