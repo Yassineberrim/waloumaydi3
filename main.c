@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/08 19:24:41 by slazar            #+#    #+#             */
-/*   Updated: 2023/10/09 00:53:59 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/09 19:16:34 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,10 +386,7 @@ int	main(int __unused ac, char __unused **av, char **envirement)
 	setup_signal_handlers();
 	while (1)
 	{
-		if(env == NULL)
-		{
-			ft_variables(&env, envirement);
-		}
+		
 		ft_initialisation(&lx);
 		line = readline("minishell $-> ");
 		if (!line)
@@ -413,13 +410,14 @@ int	main(int __unused ac, char __unused **av, char **envirement)
 					continue ;
 				}
 				cmd->env = env;
-				execution_proto(cmd, lincke_list_toaraay(env));
+				char **l9awi = lincke_list_toaraay(env);
+				execution_proto(cmd, l9awi);
+				free_double(l9awi);
 				destroy_cmd(cmd);
 			}
 		}
 		destroy_t_node(&lx);
 		if (line)
 			free(line);
-		// system("leaks minishell");
 	}
 }

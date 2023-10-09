@@ -3,11 +3,12 @@ NAME = minishell
 SRCS = lexer.c main.c utils.c env.c ./execution/builtin_utils.c ./execution/builtin/ft_pwd.c \
 		./execution/builtin/ft_echo.c ./execution/builtin/ft_cd.c ./execution/execution.c \
 		./execution/builtin/ft_export.c  ./execution/builtin/ft_unset.c ./execution/builtin/ft_extit.c \
-		./execution/builtin/export_utils.c ./execution/find_path.c ./execution/redirection.c
+		./execution/builtin/export_utils.c ./execution/find_path.c ./execution/redirection.c \
+		./execution/path_utils.c
 
 CC = cc
 
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra 
 GG = -lreadline 
 LDFLAGS="-L/Users/yberrim/.brew/opt/readline/lib"
 CPPFLAGS="-I/Users/yberrim/.brew/opt/readline/include"

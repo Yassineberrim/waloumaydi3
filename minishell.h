@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 23:15:30 by slazar            #+#    #+#             */
-/*   Updated: 2023/10/08 22:46:59 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/09 19:47:57 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,13 +129,17 @@ typedef struct s_lexer
 
 void join_quotes(t_lexer *lx);
 int is_buildin(t_cmd *cmd);
+void free_double(char **str);
+char	**lincke_list_toaraay(t_env *env);
 int ft_pwd(int fd_out);
 int ft_echo(t_cmd *cmd, int fd_out);
 int execution_builtin(t_cmd *cmd, int i);
+char	*ft_genv(t_env *env, char *str);
 int ft_export(t_cmd *cmd);
 int ft_cd(t_cmd *cmd, int fd);
 char** lincke_list_toaraay(t_env *env);
 int ft_unset(t_cmd *cmd);
+size_t	ft_envsize(t_env *env);
 int execution_proto(t_cmd *cmd, char** env);
 int ft_exit(t_cmd *cmd);
 void	add_new_var(t_env *env, char **var);
@@ -144,6 +148,7 @@ char	*find_abs_path(t_env *env ,char *cmd);
 char *ft_genv(t_env *env, char *str);
 char	**check_invalid_var(char *str);
 void check_redirections(t_cmd* cmd) ;
+char *ft_genv(t_env *env, char *str);
 // void creat_cmd(t_lexer *lx,t_cmd *cmd);
 
 /*-----------------utils-------------------*/

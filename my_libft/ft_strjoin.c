@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: slazar <slazar@student.42.fr>              +#+  +:+       +#+        */
+/*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:02:01 by slazar            #+#    #+#             */
-/*   Updated: 2023/09/18 22:21:36 by slazar           ###   ########.fr       */
+/*   Updated: 2023/10/09 16:39:00 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ char	*ft_strjoin(char *s1, char *s2)
 		s1++;
 		i++;
 	}
-	if(tmp)
-		free(tmp);
 	while (s2 && *s2)
 	{
 		cnc[i] = *s2;

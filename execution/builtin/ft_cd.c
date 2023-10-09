@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 10:40:58 by yberrim           #+#    #+#             */
-/*   Updated: 2023/10/02 15:37:42 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/09 15:47:31 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_cd(t_cmd *cmd, int fd)
 {
 	char	*old_pwd;
 
-	old_pwd = getenv("OLDPWD");
+	old_pwd = ft_genv(cmd->env, "OLDPWD");
 	if (cmd->cmd[1] == NULL)
 		return (change_directory(getenv("HOME"), fd));
 	else if (ft_strcmp(cmd->cmd[1], "-") == 0)
