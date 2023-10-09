@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 17:43:17 by yberrim           #+#    #+#             */
-/*   Updated: 2023/10/09 20:59:42 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/09 22:21:07 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ static int	exec(t_cmd *cmd, char **env, int **pipe_fd)
 	close(*pipe_fd[0]);
 	close(*pipe_fd[1]);
 	execve(cmd->cmd_path, cmd->cmd, env);
-	printf("minishell: %s: command not found\n", cmd->cmd[0]);
 	exit(g_exit_status = 127);
 	return (g_exit_status = 127);
 }
@@ -63,46 +62,30 @@ int	built_in(t_cmd *cmd)
 	return (-1);
 }
 
+void execute_command_v1(t_cmd *cmd , char **env)
+{
+	int		*pipe_fd;
+	t_cmd	*head;
+	head = cmd;
 
+	
+	pipe_fd = malloc(sizeof(int) * 2);
+	pipe(pipe_fd);
+	check_redirections(cmd);
+	cmd->cmd_path = find_abs_path(head->env, cmd->cmd[0]);
+	exec(cmd, env, &pipe_fd);
+	free(pipe_fd);
+	exit(g_exit_status);
+}
 
-
-int	execution_proto(t_cmd *cmd, char **env)
+void execute_command_v2(t_cmd *cmd , char **env)
 {
 	int		*pipe_fd;
 	int		j;
 	t_cmd	*head;
-
+	
 	j = 0;
 	head = cmd;
-	if (!cmd->next)
-	{
-		if (is_buildin(cmd))
-		{
-			int backup_output = dup(1);
-			int backup_input = dup(0);
-			check_redirections(cmd);
-			built_in(cmd);
-			if(cmd->fd_out != 1)
-				dup2(backup_output, 1);
-			if(cmd->fd_in != 0)
-				dup2(backup_input, 0);
-		}
-		else
-		{
-			if ((cmd->child_pid = fork()) == 0)
-			{
-				pipe_fd = malloc(sizeof(int) * 2);
-				pipe(pipe_fd);
-				check_redirections(cmd);
-				cmd->cmd_path = find_abs_path(head->env, cmd->cmd[0]);
-				exec(cmd, env, &pipe_fd);
-				free(pipe_fd);
-				exit(g_exit_status);
-			}
-			waitpid(cmd->child_pid, &g_exit_status, 0);
-		}
-		return (g_exit_status);
-	}
 	while (cmd)
 	{
 		pipe_fd = malloc(sizeof(int) * 2);
@@ -128,8 +111,39 @@ int	execution_proto(t_cmd *cmd, char **env)
 		free(pipe_fd);
 		cmd = cmd->next;
 	}
-	while (wait(&g_exit_status) > 0)
+}
+
+int	execution_proto(t_cmd *cmd, char **env)
+{
+	// int		*pipe_fd;
+	int		j;
+	t_cmd	*head;
+
+	j = 0;
+	head = cmd;
+	if (!cmd->next)
 	{
+		if (is_buildin(cmd))
+		{
+			int backup_output = dup(1);
+			int backup_input = dup(0);
+			check_redirections(cmd);
+			built_in(cmd);
+			if(cmd->fd_out != 1)
+				dup2(backup_output, 1);
+			if(cmd->fd_in != 0)
+				dup2(backup_input, 0);
+		}
+		else
+		{
+			if ((cmd->child_pid = fork()) == 0)
+				execute_command_v1(cmd, env);
+			waitpid(cmd->child_pid, &g_exit_status, 0);
+		}
+		return (g_exit_status);
 	}
+	execute_command_v2(cmd, env);
+	while (wait(&g_exit_status) > 0)
+		;
 	return (g_exit_status);
 }
