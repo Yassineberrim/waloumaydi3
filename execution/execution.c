@@ -6,7 +6,7 @@
 /*   By: yberrim <yberrim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 17:43:17 by yberrim           #+#    #+#             */
-/*   Updated: 2023/10/09 22:21:07 by yberrim          ###   ########.fr       */
+/*   Updated: 2023/10/09 23:53:07 by yberrim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ static int	exec(t_cmd *cmd, char **env, int **pipe_fd)
 	}
 	close(*pipe_fd[0]);
 	close(*pipe_fd[1]);
-	execve(cmd->cmd_path, cmd->cmd, env);
+	if (cmd->cmd_path)
+		execve(cmd->cmd_path, cmd->cmd, env);
+	else
+		printf("minishell: %s: command not found\n", cmd->cmd[0]);
 	exit(g_exit_status = 127);
 	return (g_exit_status = 127);
 }
@@ -112,7 +115,17 @@ void execute_command_v2(t_cmd *cmd , char **env)
 		cmd = cmd->next;
 	}
 }
-
+void dup_chek(t_cmd *cmd)
+{
+	int backup_output = dup(1);
+	int backup_input = dup(0);
+	check_redirections(cmd);
+	built_in(cmd);
+	if(cmd->fd_out != 1)
+		dup2(backup_output, 1);
+	if(cmd->fd_in != 0)
+		dup2(backup_input, 0);
+}
 int	execution_proto(t_cmd *cmd, char **env)
 {
 	// int		*pipe_fd;
@@ -124,16 +137,7 @@ int	execution_proto(t_cmd *cmd, char **env)
 	if (!cmd->next)
 	{
 		if (is_buildin(cmd))
-		{
-			int backup_output = dup(1);
-			int backup_input = dup(0);
-			check_redirections(cmd);
-			built_in(cmd);
-			if(cmd->fd_out != 1)
-				dup2(backup_output, 1);
-			if(cmd->fd_in != 0)
-				dup2(backup_input, 0);
-		}
+			dup_chek(cmd);
 		else
 		{
 			if ((cmd->child_pid = fork()) == 0)
